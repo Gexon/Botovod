@@ -1,0 +1,137 @@
+﻿<Window x:Class="Botovod.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Botovod"
+        xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
+        mc:Ignorable="d"
+        Icon="pack://application:,,,/Resources/botovod-logo.png"
+        Title="Ботовод" Height="450" Width="900">
+
+    <Window.Resources>
+        <!-- Шаблон данных для сделок -->
+        <DataTemplate DataType="{x:Type local:DealVM}">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="{Binding BotName}" Foreground="#579ee0"/>
+                    <Label FontWeight="DemiBold" Content="{Binding OutMessage_Deal}"/>
+                    <Label Content="{Binding Pair}"/>
+                    <Label Content="Текущая цена:"/>
+                    <Label Content="{Binding CurrentPrice}"/>
+                    <Label Content="Выполненные усреднения:"/>
+                    <Label Content="{Binding ManualSafetyOrders}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Текущее отклонение цены, %"/>
+                    <Label Content="{Binding LblCurrentTrailing}"/>
+                    <ProgressBar Value="{Binding PrgTrailing, Mode=OneWay}" Foreground="{Binding Foreground}" Width="100" Height="6" FlowDirection="RightToLeft"/>
+                    <ProgressBar Value="100" Foreground="Black" Width="2" Height="6"/>
+                    <ProgressBar Value="{Binding PrgTrailingR, Mode=OneWay}" Foreground="{Binding ForegroundR}" Width="100" Height="6"/>
+                    <Label Content="Максимальное отклонение цены, %"/>
+                    <Label Content="{Binding LblTrailingMaxPercent}"/>
+                    <Label Content="Последнее усреднение, %"/>
+                    <Label Content="{Binding LastFundPercent}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Заданный шаг страховочного ордера, %"/>
+                    <Label Content="{Binding LblSafetyOrder}"/>
+                    <Label Content="Заданное отклонение трейлинга, %"/>
+                    <Label Content="{Binding LblTrailingPercent}"/>
+                </StackPanel>
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <TabControl HorizontalAlignment="Left" Margin="0,1,0,0" HorizontalContentAlignment="Stretch">
+            <TabItem Header="Сделки">
+                <Grid Background="#FFE5E5E5">
+                    <!-- список сделок -->
+                    <!-- <ListBox x:Name="ListBoxDeals" ItemsSource="{Binding DealsInBotovod, Mode=OneWay, diag:PresentationTraceSources.TraceLevel=High}" HorizontalContentAlignment="Stretch" Width="1800"> -->
+                    <ListBox x:Name="ListBoxDeals" ItemsSource="{Binding DealsInBotovod}" HorizontalContentAlignment="Stretch" Width="1800">
+                        <ListBox.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Обновить список сделок"></MenuItem>
+                                <MenuItem Header="Убрать сделку для бота"></MenuItem>
+                            </ContextMenu>
+                        </ListBox.ContextMenu>
+                    </ListBox>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Боты" Visibility="Collapsed">
+                <Grid Background="#FFE5E5E5">
+                    <Button x:Name="btnGetAccounts" Content="Получить список бирж" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Click="GetAccounts" Width="218"/>
+                    <Button x:Name="btnGetBots" Content="Получить список ботов" HorizontalAlignment="Left" Height="21" Margin="10,35,0,0" VerticalAlignment="Top" Width="218" Click="GetBots"/>
+                    <ComboBox x:Name="cbxBots" HorizontalAlignment="Left" Margin="10,156,0,0" VerticalAlignment="Top" Width="218"/>
+                    <Label Content="Выберите бота" HorizontalAlignment="Left" Margin="10,125,0,0" VerticalAlignment="Top" Width="218"/>
+                    <Button x:Name="btnStartBot" Content="Запустить" HorizontalAlignment="Left" Margin="10,183,0,0" VerticalAlignment="Top" Width="109" Click="btnStartBot_Click"/>
+                    <Button x:Name="btnStopBot" Content="Остановить" HorizontalAlignment="Left" Margin="124,183,0,0" VerticalAlignment="Top" Width="104" Click="btnStopBot_Click"/>
+                    <TextBlock x:Name="OutMessage" HorizontalAlignment="Left" Margin="243,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="227" Width="547"/>
+                    <Button x:Name="btnCreateBot" Content="Создать бота" HorizontalAlignment="Left" Margin="10,208,0,0" VerticalAlignment="Top" Width="109" Click="btnCreateBot_Click"/>
+                    <Button Content="Ввести ключи" HorizontalAlignment="Left" Margin="10,61,0,0" VerticalAlignment="Top" Width="218" Height="22"/>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Тест" Visibility="Collapsed">
+                <StackPanel>
+                    <!--Binding, собственно, соединяет текстовое поле со свойством в VM -->
+                    <!--UpdateSourceTrigger, в данном случае, выполняет передачу значение в VM в момент ввода -->
+                    <TextBox Width="30" Text="{Binding Number1, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBox Width="30" Text="{Binding Number2, UpdateSourceTrigger=PropertyChanged}"/>
+                    <!--Mode=OneWay необходим для призязки свойства только для чтения -->
+                    <TextBox Width="30" Text="{Binding Number3, Mode=OneWay}" IsReadOnly="True"/>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Тест2" Visibility="Collapsed">
+                <DockPanel>
+                    <!-- Число для добавления в коллекцию -->
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                        <TextBox x:Name="TheNumber" Width="50" Margin="5"/>
+                        <Button Content="Добавить" Margin="5"/>
+                    </StackPanel>
+                    <!-- Сумма -->
+                    <TextBox DockPanel.Dock="Bottom" Text="{Binding Sum, Mode=OneWay}" Margin="5"/>
+                    <!-- Кнопка удаления из коллекции -->
+                    <Button DockPanel.Dock="Right" VerticalAlignment="Top" Content="Remove"
+                Width="130" Margin="5"
+                Command="{Binding RemoveCommand}"
+                CommandParameter="{Binding ElementName=TheListBox, Path=SelectedIndex}"/>
+                    <!-- Коллекция -->
+                    <ListBox  x:Name="TheListBox" ItemsSource="{Binding MyValues}"/>
+                </DockPanel>
+            </TabItem>
+            <TabItem Header="Настройки">
+                <DockPanel Width="800">
+                    <!-- Число для добавления в коллекцию -->
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                        <TextBox x:Name="TheString" Width="500" Margin="5"/>
+                        <Button Content="Добавить API key" Margin="5" Command="{Binding AddAPIKeyCommand}"
+                    CommandParameter="{Binding ElementName=TheString, Path=Text}" Width="115"/>
+                        <Label Content="Версия 1 Paper"/>
+                    </StackPanel>
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                        <TextBox x:Name="TheStr" Width="500" Margin="5"/>
+                        <Button Content="Добавить API secret" Margin="5" Command="{Binding AddAPISecCommand}"
+                    CommandParameter="{Binding ElementName=TheStr, Path=Text}" Width="115"/>
+                    </StackPanel>
+                    <!-- Сумма -->
+                    <TextBox DockPanel.Dock="Bottom" Text="{Binding Sum, Mode=OneWay}" Margin="5"/>
+                    <!-- Кнопка удаления из коллекции -->
+                    <Button DockPanel.Dock="Right" VerticalAlignment="Top" Content="Remove"
+                Width="130" Margin="5"
+                Command="{Binding RemoveCommand}"
+                CommandParameter="{Binding ElementName=TheListBox, Path=SelectedIndex}"/>
+                    <!-- Коллекция -->
+                    <ListBox  x:Name="TheListBox2" ItemsSource="{Binding MyValues}"/>
+                </DockPanel>
+            </TabItem>
+
+        </TabControl>
+
+    </Grid>
+</Window>
