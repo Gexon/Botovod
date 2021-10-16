@@ -5,14 +5,20 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>botovod-logo.ico</ApplicationIcon>
+    <Version>1.0.2</Version>
+    <Authors>Gexon</Authors>
+    <Description>Бот для 3commas.io</Description>
+    <Copyright>как есть</Copyright>
+    <PackageIcon>botovod-logo.png</PackageIcon>
+    <PackageIconUrl />
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Resources\botovod-logo.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Prism.Wpf" Version="8.1.97" />
+    <None Include="Resources\botovod-logo.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

@@ -1,10 +1,5 @@
 ﻿using Botovod.Models;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Botovod
@@ -15,13 +10,28 @@ namespace Botovod
     /// </summary>
     public partial class App : Application
     {
-        private static Calculator calculator = new Calculator(new InitializedData());
-        MainVM mainVM = new MainVM(calculator);
-
+        private Calculator calculator;
+        private MainVM mainVM;
         protected override void OnStartup(StartupEventArgs e)
         {
-            base.OnStartup(e);
-            new MainWindow() { DataContext = mainVM }.Show();
+            // наш калькулятор, создаем тут на всякий пожарный.
+            calculator = new Calculator(new InitializedData());
+            
+            base.OnStartup(e); 
+            MainWindow window = new MainWindow();
+            // Создаем модель представления ViewModel(у нас это mainVM) к которой привязываем главное окно.
+            mainVM = new MainVM(calculator);
+            // Когда ViewModel попросит закрыться, 
+            // закроем его ХД. 
+            mainVM.RequestClose += delegate { window.Close(); };
+            //
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(mainVM.CurrentDomain_ProcessExit);
+            // Разрешаем всем элементам управления в окне
+            // привязываться к ViewModel, установив
+            // DataContext, который распространяется вниз
+            // по дереву элементов.
+            window.DataContext = mainVM;
+            window.Show();
         }
     }
 }

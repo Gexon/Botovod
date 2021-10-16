@@ -1,12 +1,12 @@
-﻿using Prism.Mvvm;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace Botovod.Models
 {
     // какая конкретно монета и сколько ее
-    public class CoinStack : BindableBase
+    public class CoinStack : INotifyPropertyChanged
     {
         public CoinStack(Coin coin, int amount)
         {
@@ -19,7 +19,11 @@ namespace Botovod.Models
         public int Amount
         {
             get { return _amount; }
-            set { SetProperty(ref _amount, value); }
+            //set { SetProperty(ref _amount, value); }
+            set {
+                _amount = value;
+                RaisePropertyChanged();
+            }
         }
 
         internal bool PullOne()
@@ -33,6 +37,14 @@ namespace Botovod.Models
         }
 
         internal void PushOne() => ++Amount;
+
+        [field: NonSerialized]
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void RaisePropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            if (this.PropertyChanged != null)
+                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 
     // структура, а не класс, чтобы сравнение была сразу по значению, а не по ссылке

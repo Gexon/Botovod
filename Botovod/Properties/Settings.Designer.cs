@@ -46,5 +46,41 @@ namespace Botovod.Properties {
                 this["sData"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.7")]
+        public decimal SafetyOrderStep {
+            get {
+                return ((decimal)(this["SafetyOrderStep"]));
+            }
+            set {
+                this["SafetyOrderStep"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.3")]
+        public decimal TrailingDeviation {
+            get {
+                return ((decimal)(this["TrailingDeviation"]));
+            }
+            set {
+                this["TrailingDeviation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int MaxSafetyOrders {
+            get {
+                return ((int)(this["MaxSafetyOrders"]));
+            }
+            set {
+                this["MaxSafetyOrders"] = value;
+            }
+        }
     }
 }

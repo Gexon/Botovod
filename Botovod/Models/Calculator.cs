@@ -1,17 +1,9 @@
-﻿using Prism.Mvvm;
-using System;
-using System.Collections.ObjectModel;
-using System.Linq;
+﻿using System;
 
 namespace Botovod.Models
 {
-    public class Calculator : BindableBase
+    public class Calculator
     {
-        //--------------old----------------
-        private readonly ObservableCollection<int> _myValues = new ObservableCollection<int>();
-        public readonly ReadOnlyObservableCollection<int> MyPublicValues;
-        //--------------
-
         public Trader Trader { get; }
         //        
         public InitializedData initData;
@@ -20,10 +12,6 @@ namespace Botovod.Models
 
         public Calculator(InitializedData inInitData)
         {
-            //--------------old----------------
-            MyPublicValues = new ReadOnlyObservableCollection<int>(_myValues);
-            //--------------
-
             initData = inInitData;
             Trader = new Trader(initData);
 
@@ -32,26 +20,6 @@ namespace Botovod.Models
             timer.Interval = new TimeSpan(0, 0, 6);
             timer.Start();
         }
-        //--------------old----------------
-        //добавление в коллекцию числа и уведомление об изменении суммы
-        public void AddValue(int value)
-        {
-            _myValues.Add(value);
-            RaisePropertyChanged("Sum");
-        }
-        //проверка на валидность, удаление из коллекции и уведомление об изменении суммы
-        public void RemoveValue(int index)
-        {
-            //проверка на валидность удаления из коллекции - обязанность модели
-            if (index >= 0 && index < _myValues.Count) _myValues.RemoveAt(index);
-            RaisePropertyChanged("Sum");
-        }
-        public int Sum => MyPublicValues.Sum(); //сумма
-
-        public static int GetSumOf(int a, int b) => a + b;
-        //--------------
-
-        public int Sum2 => MyPublicValues.Sum(); //сумма
 
         /// <summary>
         /// Основной калькулятор
@@ -68,7 +36,7 @@ namespace Botovod.Models
             bool resultGetDeals = await Trader.GetDeals();
             if (!resultGetDeals)
             {
-                if (string.IsNullOrEmpty(initData.GetKData) || string.IsNullOrEmpty(initData.GetSData)) { return; }
+                if (string.IsNullOrEmpty(initData.KData) || string.IsNullOrEmpty(initData.SData)) { return; }
 
             }
             // обходим все сделки по порядку
@@ -104,13 +72,15 @@ namespace Botovod.Models
                 decimal deltaLastFundPrice = deal.LastFundPrice - boughtAveragePrice; // отклонение от средней цены, а не от текущей
                 if (deltaLastFundPrice == 0) { deal.LastFundPercent = 0; }
                 else { deal.LastFundPercent = deltaLastFundPrice * 100 / boughtAveragePrice; }
-                if (currentTralingPercent < deal.LastFundPercent + deal.LblSafetyOrder)
+                // проверяем на диапазон отклонений и ограничений количества СО
+                if ((currentTralingPercent < deal.LastFundPercent - deal.SafetyOrderStep) && 
+                        (deal.xDeal.CompletedManualSafetyOrdersCount < deal.MaxSafetyOrders))
                 {
                     deal.IsTrailing = true;
                     // проверка на отклонение цены вверх(лонг) от минимального, чтоб начать усреднение
                     decimal deltaTrailing = currentTralingPercent - tralingMaxPercent;
                     deal.OutMessage_Deal = $"Трейлинг активирован {Math.Round(deltaTrailing, 2)}%";
-                    if (deltaTrailing > deal.LblTrailingPercent)
+                    if (deltaTrailing > deal.TrailingDeviation)
                     {
                         deal.OutMessage_Deal = "Усредняюсь";
                         bool resultAddFunds = await Trader.AddFunds(deal);
@@ -128,5 +98,7 @@ namespace Botovod.Models
             // восстанавливаем таймер
             timer.Start();
         }
+
+        
     }
 }

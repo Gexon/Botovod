@@ -1,18 +1,19 @@
-﻿using Prism.Mvvm;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using XCommas.Net.Objects;
 
 namespace Botovod.Models
 {
-    public class Trader : BindableBase
+    public class Trader : INotifyPropertyChanged
     {
         internal XCommas.Net.XCommasApi client;
         InitializedData initData;
-        int maxSafetyOrders = 5;
         // тут депозит торгоша
         public ReadOnlyObservableCollection<CoinStack> TraderCash { get; }
         private readonly ObservableCollection<CoinStack> _traderCash;
@@ -23,7 +24,7 @@ namespace Botovod.Models
         public Trader(InitializedData inInitData)
         {
             initData = inInitData;
-            client = new XCommas.Net.XCommasApi(initData.GetKData, initData.GetSData)
+            client = new XCommas.Net.XCommasApi(initData.KData, initData.SData)
             {
                 UserMode = UserMode.Paper
             };
@@ -31,9 +32,6 @@ namespace Botovod.Models
             // сделки торговца
             _traderDeals = new ObservableCollection<BotovodDeal>();
             TraderDeals = new ReadOnlyObservableCollection<BotovodDeal>(_traderDeals);
-            // загружаем сделки с сервиса 3коммас
-            //GetDeals(); // вызывала ошибку "System.InvalidOperationException: "Объект ItemsControl не соответствует своему источнику элементов.\n Дополнительные сведения см. в описании внутреннего исключения."
-            //"System.Diagnostics.PresentationTraceSources.SetTraceLevel(myItemsControl.ItemContainerGenerator, System.Diagnostics.PresentationTraceLevel.High)"
         }
 
         internal async Task<bool> AddFunds(BotovodDeal deal)
@@ -41,12 +39,7 @@ namespace Botovod.Models
             // Усреднение. volume - это сколько торгуемой валюты купить на битки например.
             decimal volume = deal.xDeal.BaseOrderVolume / deal.xDeal.CurrentPrice;
             volume = volume * (deal.xDeal.CompletedManualSafetyOrdersCount + 1); // мартин 2
-            // ограничить количество СО?
-            if (deal.xDeal.CompletedManualSafetyOrdersCount >= maxSafetyOrders)
-            {
-                deal.OutMessage_Deal = $"Максимальное количество СО: {maxSafetyOrders}";
-                return false;
-            }
+
             deal.OutMessage_Deal = $"Покупаю {Math.Round(volume, 5)} торгуемых монет";
             //return true;
             var data = new DealAddFundsParameters
@@ -74,7 +67,7 @@ namespace Botovod.Models
 
         internal async Task<bool> GetDeals()
         {
-            if (string.IsNullOrEmpty(initData.GetKData) || string.IsNullOrEmpty(initData.GetSData))
+            if (string.IsNullOrEmpty(initData.KData) || string.IsNullOrEmpty(initData.SData))
             {
                 MessageBox.Show("Вбейте API ключи в настройках", "GetDeals", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
@@ -120,12 +113,17 @@ namespace Botovod.Models
                     bool del = true;
                     foreach (var item in response.Data)
                     {
-                        if (item.Id == _traderDeals[i].xDeal.Id) { 
+                        if (item.Id == _traderDeals[i].xDeal.Id)
+                        {
                             del = false;
                             continue;
                         }
                     }
-                    if (del) { _traderDeals.RemoveAt(i); }
+                    if (del)
+                    {
+                        _traderDeals.RemoveAt(i);
+                        RaisePropertyChanged();
+                    }
                 }
 
             }
@@ -149,10 +147,30 @@ namespace Botovod.Models
             // если не обнаружена сделка, создаем новую
             if (!exist)
             {
+                // первое "создание" объекта BotovodDeal
+                inDeal.MaxSafetyOrders = initData.MaxSafetyOrders;    // при первом создании используем данные для всех.
+                inDeal.SafetyOrderStep = initData.SafetyOrderStep;
+                inDeal.TrailingDeviation = initData.TrailingDeviation;
                 _traderDeals.Add(inDeal);
+                RaisePropertyChanged();
             }
 
-
         }
+
+        public bool FillingDeals(List<BotovodDeal> loadDeals)
+        {
+            _traderDeals.Clear();
+            foreach (BotovodDeal deal in loadDeals)
+            {
+                _traderDeals.Add(deal);
+            }
+            RaisePropertyChanged(nameof(_traderDeals));
+            return true;
+        }
+
+        [field: NonSerialized]
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void RaisePropertyChanged([CallerMemberName] string prop = "")
+        => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
     }
 }
