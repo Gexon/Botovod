@@ -49,31 +49,31 @@ namespace Botovod.Models
                 }
 
                 decimal currentPrice = deal.xDeal.CurrentPrice; // текущая цена
+                if (currentPrice == 0) { continue; }
                 decimal boughtAveragePrice = deal.xDeal.BoughtAveragePrice; // средняя цена сделки
-                // текущее отклонение цены в %
-                decimal currentTralingPercent;   //= (double)deal.xDeal.ActualProfitPercentage;
-                decimal deltaPrice = currentPrice - boughtAveragePrice;   //0,0001
-                if (deltaPrice == 0) { currentTralingPercent = 0; }
-                else { currentTralingPercent = deltaPrice * 100 / boughtAveragePrice; }
-                // максимальное отклонение цены в %
-                decimal tralingMaxPercent;
-                decimal deltaMaxPrice = deal.TrailingMaxPrice - boughtAveragePrice; // отклонение от средней цены, а не от текущей
-                if (deltaMaxPrice == 0) { tralingMaxPercent = 0; }
-                else { tralingMaxPercent = deltaMaxPrice * 100 / boughtAveragePrice; }
-                // алгоритм для лонгового ботаs
+                if (boughtAveragePrice == 0) { boughtAveragePrice = currentPrice; }
+
+                // рассчитываем текущее отклонение цены в %
+                // deal.xDeal.ActualProfitPercentage;
+                decimal currentTralingPercent = (currentPrice - boughtAveragePrice) * 100 / boughtAveragePrice;
+                // считаем максимальное отклонение цены в %
+                decimal tralingMaxPercent = (deal.TrailingMaxPrice - boughtAveragePrice) * 100 / boughtAveragePrice;
+
+                // обновляем максимальное отклонение (алгоритм для лонгового ботаs)
                 if (currentTralingPercent < tralingMaxPercent)
                 {
                     deal.TrailingMaxPrice = currentPrice;    // обновляем максимальное отклонение 
                     deal.LblTrailingMaxPercent = Math.Round(currentTralingPercent, 2);
                 }
                 deal.LblCurrentTrailing = Math.Round(currentTralingPercent, 2);
-                // если активирован трейлинг то сменить цвет на CornflowerBlue SteelBlue DeepSkyBlue
+
+                // вычисляем последнее усреднение, %
+                // отклонение от средней цены, а не от текущей
+                deal.LastFundPercent = (deal.LastFundPrice - boughtAveragePrice) * 100 / boughtAveragePrice;
+
                 // проверка на активацию трейлинга
-                decimal deltaLastFundPrice = deal.LastFundPrice - boughtAveragePrice; // отклонение от средней цены, а не от текущей
-                if (deltaLastFundPrice == 0) { deal.LastFundPercent = 0; }
-                else { deal.LastFundPercent = deltaLastFundPrice * 100 / boughtAveragePrice; }
-                // проверяем на диапазон отклонений и ограничений количества СО
-                if ((currentTralingPercent < deal.LastFundPercent - deal.SafetyOrderStep) && 
+                // проверяем текущее отклонение цены в % < (последнее усреднение, % - шаг страховочного ордера в %). и ограничений количества СО. 
+                if ((currentTralingPercent < deal.LastFundPercent - deal.SafetyOrderStep) &&
                         (deal.xDeal.CompletedManualSafetyOrdersCount < deal.MaxSafetyOrders))
                 {
                     deal.IsTrailing = true;
@@ -99,6 +99,6 @@ namespace Botovod.Models
             timer.Start();
         }
 
-        
+
     }
 }
