@@ -21,4 +21,4 @@
 И еще, в данной версии шаг СО равен 0.7%, трейлинг отклонение 0.3%. Всего 5 СО.
 Потом, по мере возможности допилю чтоб можно было все это настраивать.
 
-[![Видеоинструкция](https://img.youtube.com/YaPg-TQoTRo/maxresdefault.jpg)](https://youtu.be/YaPg-TQoTRo)
+Видеоинструкция: https://youtu.be/YaPg-TQoTRo
