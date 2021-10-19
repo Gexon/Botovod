@@ -15,8 +15,8 @@ namespace Botovod.Models
         internal XCommas.Net.XCommasApi client;
         InitializedData initData;
         // тут депозит торгоша
-        public ReadOnlyObservableCollection<CoinStack> TraderCash { get; }
-        private readonly ObservableCollection<CoinStack> _traderCash;
+        //public ReadOnlyObservableCollection<CoinStack> TraderCash { get; }
+        //private readonly ObservableCollection<CoinStack> _traderCash;
         // тут коллекция сделок торгоша
         public ReadOnlyObservableCollection<BotovodDeal> TraderDeals { get; }
         private readonly ObservableCollection<BotovodDeal> _traderDeals;
@@ -116,7 +116,7 @@ namespace Botovod.Models
                         if (item.Id == _traderDeals[i].xDeal.Id)
                         {
                             del = false;
-                            continue;
+                            break;
                         }
                     }
                     if (del)

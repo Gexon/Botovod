@@ -119,7 +119,7 @@
                     <!-- Максимальное количество страховочных ордеров (для всех новых сделок) -->
                     <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
                         <Label Content="Количество страховочных ордеров" Width="210" ToolTip="Задает значение для всех новых сделок" />
-                        <TextBox x:Name="SafetyOrderStep" Text="{Binding MaxSafetyOrders, Mode=TwoWay, UpdateSourceTrigger=Default}" Width="100" Margin="5" ToolTip="Значение по умолчанию 0.7"/>
+                        <TextBox x:Name="SafetyOrderStep" Text="{Binding MaxSafetyOrders, Mode=TwoWay, UpdateSourceTrigger=Default}" Width="100" Margin="5" ToolTip="Значение по умолчанию 5"/>
                     </StackPanel>
                     <!-- Трейлинг отклонение, % (для всех новых сделок) -->
                     <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
@@ -129,7 +129,7 @@
                     <!-- Шаг страховочного ордера, % (для всех новых сделок) -->
                     <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
                         <Label Content="Шаг страховочного ордера, %" Width="210" ToolTip="Задает значение для всех новых сделок" />
-                        <TextBox x:Name="MaxSafetyOrders" Width="100" Text="{Binding SafetyOrderStep, Mode=TwoWay, UpdateSourceTrigger=Default}" Margin="5" ToolTip="Значение по умолчанию 5"/>
+                        <TextBox x:Name="MaxSafetyOrders" Width="100" Text="{Binding SafetyOrderStep, Mode=TwoWay, UpdateSourceTrigger=Default}" Margin="5" ToolTip="Значение по умолчанию 0.7"/>
                     </StackPanel>
                     <!-- Сумма -->
                     <TextBox DockPanel.Dock="Bottom" Text="1 ключ" Margin="5"/>

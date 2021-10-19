@@ -25,8 +25,8 @@ namespace Botovod
         private Dictionary<int, Bot> bots = new Dictionary<int, Bot>();
         private Dictionary<int, Deal> deals = new Dictionary<int, Deal>();
         System.Windows.Threading.DispatcherTimer timer = new System.Windows.Threading.DispatcherTimer();
-        int tralingDealId = -1;
-        double trailingMax = 0;
+        //int tralingDealId = -1;
+        //double trailingMax = 0;
         string trailingPair = string.Empty;
         int accountID = 0;
 
@@ -264,7 +264,7 @@ namespace Botovod
 
         }
 
-        private async void btnCancelDeal_Click(object sender, RoutedEventArgs e)
+        private void btnCancelDeal_Click(object sender, RoutedEventArgs e)
         {
             // Блокируем кнопку чтоб не натыкали мильен раз
             //OutMessage_Deals.Text = "Отменяю сделку...";
@@ -302,7 +302,7 @@ namespace Botovod
 
         }
 
-        private async void btnAddFunds_Click(object sender, RoutedEventArgs e)
+        private void btnAddFunds_Click(object sender, RoutedEventArgs e)
         {
         }
 

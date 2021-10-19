@@ -16,7 +16,7 @@ namespace Botovod.Models
             Trader = new Trader(initData);
 
             // настройки таймера
-            timer.Tick += new EventHandler(timerTick);
+            timer.Tick += TimerTick;
             timer.Interval = new TimeSpan(0, 0, 6);
             timer.Start();
         }
@@ -26,7 +26,7 @@ namespace Botovod.Models
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void timerTick(object sender, EventArgs e)
+        private async void TimerTick(object sender, EventArgs e)
         {
             timer.Stop();  // глушим таймер дабы дабы
 
