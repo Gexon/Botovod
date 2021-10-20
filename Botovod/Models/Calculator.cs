@@ -113,7 +113,7 @@ namespace Botovod.Models
                     {
                         deal.LastFundPrice = currentPrice; // обновляем последнее усреднениеы
                         deal.TrailingMaxPrice =
-                            currentPrice; // обнувляем максимальное отклонение, иначе будет усреднять до посинения.
+                            currentPrice; // обнувляем максимальное отклонение, иначе будет усреднять до посинения..
                     }
 
                     deal.IsTrailing = false;
