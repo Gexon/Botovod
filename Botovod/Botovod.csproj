@@ -11,6 +11,11 @@
     <Copyright>как есть</Copyright>
     <PackageIcon>botovod-logo.png</PackageIcon>
     <PackageIconUrl />
+    <PackageVersion>1.0.3</PackageVersion>
+    <Title>Botovod</Title>
+    <PackageProjectUrl>https://github.com/Gexon/Botovod</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/Gexon/Botovod/blob/master/LICENSE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/Gexon/Botovod</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

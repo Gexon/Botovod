@@ -56,7 +56,7 @@ namespace Botovod.Models
                 }
 
                 // главный мозг
-                if (!await CalculateTrailing(deal)) return; // серьезная ошибка, покидаем лодку.
+                await CalculateTrailing(deal); 
             }
 
             // восстанавливаем таймер
@@ -64,12 +64,12 @@ namespace Botovod.Models
         }
 
         // Основыные расчеты движения цены, процентов, отклонений трейлинга.
-        private async Task<bool> CalculateTrailing(BotovodDeal deal)
+        private async Task CalculateTrailing(BotovodDeal deal)
         {
             var currentPrice = deal.XDeal.CurrentPrice;
             if (currentPrice == 0)
             {
-                return false;
+                return;
             }
 
             var boughtAveragePrice = deal.XDeal.BoughtAveragePrice; // средняя цена сделки
@@ -93,8 +93,7 @@ namespace Botovod.Models
 
             deal.LblCurrentTrailing = Math.Round(currentTrailingPercent, 2);
 
-            // вычисляем последнее усреднение, %
-            // отклонение от средней цены, а не от текущей
+            // вычисляем последнее усреднение, %. Отклонение от средней цены, а не от текущей(не ну если средняя равна нулю, то тогда от текущей)
             deal.LastFundPercent = (deal.LastFundPrice - boughtAveragePrice) * 100 / boughtAveragePrice;
 
             // проверка на активацию трейлинга
@@ -124,8 +123,6 @@ namespace Botovod.Models
             {
                 deal.IsTrailing = false;
             }
-
-            return true;
         }
     }
 }

@@ -14,9 +14,11 @@ namespace Botovod.Models
             OutMessageDeal = "Новый";
             // вычисляемые поля/свойства
             TrailingMaxPrice = inXDeal.CurrentPrice;
-            if (inXDeal.ActualProfitPercentage != null) LblTrailingMaxPercent = (decimal)inXDeal.ActualProfitPercentage;
+            LblTrailingMaxPercent = inXDeal.ActualProfitPercentage != null
+                ? LblTrailingMaxPercent = (decimal)inXDeal.ActualProfitPercentage
+                : 0m;
             LblCurrentTrailing = 0;
-            LastFundPrice = inXDeal.BoughtAveragePrice;
+            LastFundPrice = inXDeal.BoughtAveragePrice > 0 ? inXDeal.BoughtAveragePrice : inXDeal.CurrentPrice;
             // параметры трейлинга
             SafetyOrderStep = 0.7m;
             TrailingDeviation = 0.3m;
@@ -158,7 +160,7 @@ namespace Botovod.Models
             get => _lastFundPrice;
             set
             {
-                if (_lastFundPrice == value) return;
+                if (_lastFundPrice == value || value <= 0) return;
                 _lastFundPrice = value;
                 RaisePropertyChanged();
             }
