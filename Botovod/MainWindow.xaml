@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Botovod"
-        xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
         mc:Ignorable="d"
         Icon="pack://application:,,,/Resources/botovod-logo.png"
         Title="Ботовод" Height="450" Width="1000">
@@ -15,59 +14,72 @@
             <StackPanel Orientation="Vertical">
                 <StackPanel.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="{Binding BotName}"></MenuItem>
+                        <MenuItem Header="{Binding BotName}" />
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <Label Grid.Row="0" Content="Максимальное количество усреднений" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
-                            <TextBox Grid.Row="1" Text="{Binding Path=MaxSafetyOrders, Mode=TwoWay, UpdateSourceTrigger=Default}" 
-                                     Width="100" Margin="5" ToolTip="Значение по умолчанию 5" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                            <Label Grid.Row="0" Content="Максимальное количество усреднений" HorizontalAlignment="Left"
+                                   VerticalAlignment="Bottom" />
+                            <TextBox Grid.Row="1"
+                                     Text="{Binding Path=MaxSafetyOrders, Mode=TwoWay, UpdateSourceTrigger=Default}"
+                                     Width="100" Margin="5" ToolTip="Значение по умолчанию 5"
+                                     HorizontalAlignment="Left" VerticalAlignment="Top" />
                         </Grid>
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <Label Grid.Row="0" Content="Шаг страховочного ордера, %" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
-                            <TextBox Grid.Row="1" Text="{Binding Path=SafetyOrderStep, Mode=TwoWay, UpdateSourceTrigger=Default}" Width="100" Margin="5" ToolTip="Значение по умолчанию 0,7" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                            <Label Grid.Row="0" Content="Шаг страховочного ордера, %" HorizontalAlignment="Left"
+                                   VerticalAlignment="Bottom" />
+                            <TextBox Grid.Row="1"
+                                     Text="{Binding Path=SafetyOrderStep, Mode=TwoWay, UpdateSourceTrigger=Default}"
+                                     Width="100" Margin="5" ToolTip="Значение по умолчанию 0,7"
+                                     HorizontalAlignment="Left" VerticalAlignment="Top" />
                         </Grid>
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <Label Grid.Row="0" Content="Трейлинг отклонение, %" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
-                            <TextBox Grid.Row="1" Text="{Binding Path=TrailingDeviation, Mode=TwoWay, UpdateSourceTrigger=Default}" Width="100" Margin="5" ToolTip="Значение по умолчанию 0,3" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                            <Label Grid.Row="0" Content="Трейлинг отклонение, %" HorizontalAlignment="Left"
+                                   VerticalAlignment="Bottom" />
+                            <TextBox Grid.Row="1"
+                                     Text="{Binding Path=TrailingDeviation, Mode=TwoWay, UpdateSourceTrigger=Default}"
+                                     Width="100" Margin="5" ToolTip="Значение по умолчанию 0,3"
+                                     HorizontalAlignment="Left" VerticalAlignment="Top" />
                         </Grid>
                     </ContextMenu>
                 </StackPanel.ContextMenu>
                 <StackPanel Orientation="Horizontal">
-                    <Label Content="{Binding BotName}" Foreground="#579ee0"/>
-                    <Label FontWeight="DemiBold" Content="{Binding OutMessage_Deal}"/>
-                    <Label Content="{Binding Pair}"/>
-                    <Label Content="Текущая цена:"/>
-                    <Label Content="{Binding CurrentPrice}"/>
-                    <Label Content="Выполненные усреднения:"/>
-                    <Label Content="{Binding ManualSafetyOrders}"/>
+                    <Label Content="{Binding BotName}" Foreground="#579ee0" />
+                    <Label FontWeight="DemiBold" Content="{Binding OutMessageDeal}" />
+                    <Label Content="{Binding Pair}" />
+                    <Label Content="Текущая цена:" />
+                    <Label Content="{Binding CurrentPrice}" />
+                    <Label Content="Выполненные усреднения:" />
+                    <Label Content="{Binding ManualSafetyOrders}" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <Label Content="Текущее отклонение цены, %"/>
-                    <Label Content="{Binding LblCurrentTrailing}"/>
-                    <ProgressBar Value="{Binding PrgTrailing, Mode=OneWay}" Foreground="{Binding Foreground}" Width="100" Height="6" FlowDirection="RightToLeft"/>
-                    <ProgressBar Value="100" Foreground="Black" Width="2" Height="6"/>
-                    <ProgressBar Value="{Binding PrgTrailingR, Mode=OneWay}" Foreground="{Binding ForegroundR}" Width="100" Height="6"/>
-                    <Label Content="Максимальное отклонение цены, %"/>
-                    <Label Content="{Binding LblTrailingMaxPercent}"/>
-                    <Label Content="Последнее усреднение, %"/>
-                    <Label Content="{Binding LastFundPercent}"/>
+                    <Label Content="Текущее отклонение цены, %" />
+                    <Label Content="{Binding LblCurrentTrailing}" />
+                    <ProgressBar Value="{Binding PrgTrailing, Mode=OneWay}" Foreground="{Binding Foreground}"
+                                 Width="100" Height="6" FlowDirection="RightToLeft" />
+                    <ProgressBar Value="100" Foreground="Black" Width="2" Height="6" />
+                    <ProgressBar Value="{Binding PrgTrailingR, Mode=OneWay}" Foreground="{Binding ForegroundR}"
+                                 Width="100" Height="6" />
+                    <Label Content="Максимальное отклонение цены, %" />
+                    <Label Content="{Binding LblTrailingMaxPercent}" />
+                    <Label Content="Последнее усреднение, %" />
+                    <Label Content="{Binding LastFundPercent}" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <Label Content="Заданный шаг страховочного ордера, %"/>
-                    <Label Content="{Binding SafetyOrderStep}"/>
-                    <Label Content="Заданное отклонение трейлинга, %"/>
-                    <Label Content="{Binding TrailingDeviation}"/>
+                    <Label Content="Заданный шаг страховочного ордера, %" />
+                    <Label Content="{Binding SafetyOrderStep}" />
+                    <Label Content="Заданное отклонение трейлинга, %" />
+                    <Label Content="{Binding TrailingDeviation}" />
                 </StackPanel>
             </StackPanel>
         </DataTemplate>
@@ -75,28 +87,38 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto" />
         </Grid.ColumnDefinitions>
         <TabControl HorizontalAlignment="Left" Margin="0,1,0,0" HorizontalContentAlignment="Stretch">
             <TabItem Header="Сделки">
                 <Grid Background="#FFE5E5E5">
                     <!-- список сделок -->
                     <!-- <ListBox x:Name="ListBoxDeals" ItemsSource="{Binding DealsInBotovod, Mode=OneWay, diag:PresentationTraceSources.TraceLevel=High}" HorizontalContentAlignment="Stretch" Width="1800"> -->
-                    <ListBox x:Name="ListBoxDeals" ItemsSource="{Binding DealsInBotovod}" HorizontalContentAlignment="Stretch" Width="1800"/>
+                    <ListBox x:Name="ListBoxDeals" ItemsSource="{Binding DealsInBotovod}"
+                             HorizontalContentAlignment="Stretch" Width="1800" />
                 </Grid>
             </TabItem>
 
             <TabItem Header="Боты" Visibility="Collapsed">
                 <Grid Background="#FFE5E5E5">
-                    <Button x:Name="btnGetAccounts" Content="Получить список бирж" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Click="GetAccounts" Width="218"/>
-                    <Button x:Name="btnGetBots" Content="Получить список ботов" HorizontalAlignment="Left" Height="21" Margin="10,35,0,0" VerticalAlignment="Top" Width="218" Click="GetBots"/>
-                    <ComboBox x:Name="cbxBots" HorizontalAlignment="Left" Margin="10,156,0,0" VerticalAlignment="Top" Width="218"/>
-                    <Label Content="Выберите бота" HorizontalAlignment="Left" Margin="10,125,0,0" VerticalAlignment="Top" Width="218"/>
-                    <Button x:Name="btnStartBot" Content="Запустить" HorizontalAlignment="Left" Margin="10,183,0,0" VerticalAlignment="Top" Width="109" Click="btnStartBot_Click"/>
-                    <Button x:Name="btnStopBot" Content="Остановить" HorizontalAlignment="Left" Margin="124,183,0,0" VerticalAlignment="Top" Width="104" Click="btnStopBot_Click"/>
-                    <TextBlock x:Name="OutMessage" HorizontalAlignment="Left" Margin="243,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="227" Width="547"/>
-                    <Button x:Name="btnCreateBot" Content="Создать бота" HorizontalAlignment="Left" Margin="10,208,0,0" VerticalAlignment="Top" Width="109" Click="btnCreateBot_Click"/>
-                    <Button Content="Ввести ключи" HorizontalAlignment="Left" Margin="10,61,0,0" VerticalAlignment="Top" Width="218" Height="22"/>
+                    <Button x:Name="BtnGetAccounts" Content="Получить список бирж" HorizontalAlignment="Left"
+                            Margin="10,10,0,0" VerticalAlignment="Top" Click="GetAccounts" Width="218" />
+                    <Button x:Name="BtnGetBots" Content="Получить список ботов" HorizontalAlignment="Left" Height="21"
+                            Margin="10,35,0,0" VerticalAlignment="Top" Width="218" Click="GetBots" />
+                    <ComboBox x:Name="CbxBots" HorizontalAlignment="Left" Margin="10,156,0,0" VerticalAlignment="Top"
+                              Width="218" />
+                    <Label Content="Выберите бота" HorizontalAlignment="Left" Margin="10,125,0,0"
+                           VerticalAlignment="Top" Width="218" />
+                    <Button x:Name="BtnStartBot" Content="Запустить" HorizontalAlignment="Left" Margin="10,183,0,0"
+                            VerticalAlignment="Top" Width="109" Click="btnStartBot_Click" />
+                    <Button x:Name="BtnStopBot" Content="Остановить" HorizontalAlignment="Left" Margin="124,183,0,0"
+                            VerticalAlignment="Top" Width="104" Click="btnStopBot_Click" />
+                    <TextBlock x:Name="OutMessage" HorizontalAlignment="Left" Margin="243,10,0,0" TextWrapping="Wrap"
+                               VerticalAlignment="Top" Height="227" Width="547" />
+                    <Button x:Name="BtnCreateBot" Content="Создать бота" HorizontalAlignment="Left" Margin="10,208,0,0"
+                            VerticalAlignment="Top" Width="109" Click="btnCreateBot_Click" />
+                    <Button Content="Ввести ключи" HorizontalAlignment="Left" Margin="10,61,0,0"
+                            VerticalAlignment="Top" Width="218" Height="22" />
                 </Grid>
             </TabItem>
 
@@ -104,42 +126,52 @@
                 <DockPanel Width="800">
                     <!-- Число для добавления в коллекцию -->
                     <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                        <TextBox x:Name="TheString" Width="500" Margin="5"/>
-                        <Button Content="Добавить API key" Margin="5" 
+                        <TextBox x:Name="TheString" Width="500" Margin="5" />
+                        <Button Content="Добавить API key" Margin="5"
                                 Command="{Binding AddAPIKeyCommand}"
-                                CommandParameter="{Binding ElementName=TheString, Path=Text}" Width="115"/>
-                        <Label Content="Версия 1 Paper"/>
+                                CommandParameter="{Binding ElementName=TheString, Path=Text}" Width="115" />
+                        <Label Content="Версия 1 Paper" />
                     </StackPanel>
                     <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                        <TextBox x:Name="TheStr" Width="500" Margin="5"/>
-                        <Button Content="Добавить API secret" Margin="5" 
+                        <TextBox x:Name="TheStr" Width="500" Margin="5" />
+                        <Button Content="Добавить API secret" Margin="5"
                                 Command="{Binding AddAPISecCommand}"
-                                CommandParameter="{Binding ElementName=TheStr, Path=Text}" Width="115"/>
+                                CommandParameter="{Binding ElementName=TheStr, Path=Text}" Width="115" />
                     </StackPanel>
                     <!-- Максимальное количество страховочных ордеров (для всех новых сделок) -->
                     <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                        <Label Content="Количество страховочных ордеров" Width="210" ToolTip="Задает значение для всех новых сделок" />
-                        <TextBox x:Name="SafetyOrderStep" Text="{Binding MaxSafetyOrders, Mode=TwoWay, UpdateSourceTrigger=Default}" Width="100" Margin="5" ToolTip="Значение по умолчанию 5"/>
+                        <Label Content="Количество страховочных ордеров" Width="210"
+                               ToolTip="Задает значение для всех новых сделок" />
+                        <TextBox x:Name="SafetyOrderStep"
+                                 Text="{Binding MaxSafetyOrders, Mode=TwoWay, UpdateSourceTrigger=Default}" Width="100"
+                                 Margin="5" ToolTip="Значение по умолчанию 5" />
                     </StackPanel>
                     <!-- Трейлинг отклонение, % (для всех новых сделок) -->
                     <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                        <Label Content="Трейлинг отклонение, %" Width="210" ToolTip="Задает значение для всех новых сделок" />
-                        <TextBox x:Name="TrailingDeviation" Text="{Binding TrailingDeviation, Mode=TwoWay, UpdateSourceTrigger=Default}" Width="100" Margin="5" ToolTip="Значение по умолчанию 0.3"/>
+                        <Label Content="Трейлинг отклонение, %" Width="210"
+                               ToolTip="Задает значение для всех новых сделок" />
+                        <TextBox x:Name="TrailingDeviation"
+                                 Text="{Binding TrailingDeviation, Mode=TwoWay, UpdateSourceTrigger=Default}"
+                                 Width="100" Margin="5" ToolTip="Значение по умолчанию 0.3" />
                     </StackPanel>
                     <!-- Шаг страховочного ордера, % (для всех новых сделок) -->
                     <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                        <Label Content="Шаг страховочного ордера, %" Width="210" ToolTip="Задает значение для всех новых сделок" />
-                        <TextBox x:Name="MaxSafetyOrders" Width="100" Text="{Binding SafetyOrderStep, Mode=TwoWay, UpdateSourceTrigger=Default}" Margin="5" ToolTip="Значение по умолчанию 0.7"/>
+                        <Label Content="Шаг страховочного ордера, %" Width="210"
+                               ToolTip="Задает значение для всех новых сделок" />
+                        <TextBox x:Name="MaxSafetyOrders" Width="100"
+                                 Text="{Binding SafetyOrderStep, Mode=TwoWay, UpdateSourceTrigger=Default}" Margin="5"
+                                 ToolTip="Значение по умолчанию 0.7" />
                     </StackPanel>
                     <!-- Сумма -->
-                    <TextBox DockPanel.Dock="Bottom" Text="1 ключ" Margin="5"/>
+                    <TextBox DockPanel.Dock="Bottom" Text="1 ключ" Margin="5" />
                     <!-- Кнопка удаления из коллекции -->
-                    <Button DockPanel.Dock="Right" VerticalAlignment="Top" Content="Удалить ключи" ToolTip="Удаляет все API ключи из хранилища"
-                        Width="130" Margin="5"
-                        Command="{Binding RemoveCommand}"
-                        CommandParameter="{Binding ElementName=TheListBox2, Path=SelectedIndex}"/>
+                    <Button DockPanel.Dock="Right" VerticalAlignment="Top" Content="Удалить ключи"
+                            ToolTip="Удаляет все API ключи из хранилища"
+                            Width="130" Margin="5"
+                            Command="{Binding RemoveCommand}"
+                            CommandParameter="{Binding ElementName=TheListBox2, Path=SelectedIndex}" />
                     <!-- Коллекция -->
-                    <ListBox  x:Name="TheListBox2" ItemsSource="{Binding}"/>
+                    <ListBox x:Name="TheListBox2" ItemsSource="{Binding}" />
                 </DockPanel>
             </TabItem>
 

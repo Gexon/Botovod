@@ -37,29 +37,29 @@ namespace Botovod.Models
         internal async Task<bool> AddFunds(BotovodDeal deal)
         {
             // Усреднение. volume - это сколько торгуемой валюты купить на битки например.
-            decimal volume = deal.xDeal.BaseOrderVolume / deal.xDeal.CurrentPrice;
-            volume = volume * (deal.xDeal.CompletedManualSafetyOrdersCount + 1); // мартин 2
+            decimal volume = deal.XDeal.BaseOrderVolume / deal.XDeal.CurrentPrice;
+            volume = volume * (deal.XDeal.CompletedManualSafetyOrdersCount + 1); // мартин 2
 
-            deal.OutMessage_Deal = $"Покупаю {Math.Round(volume, 5)} торгуемых монет";
+            deal.OutMessageDeal = $"Покупаю {Math.Round(volume, 5)} торгуемых монет";
             //return true;
             var data = new DealAddFundsParameters
             {
                 Quantity = volume,
                 IsMarket = true,
-                DealId = deal.xDeal.Id,
+                DealId = deal.XDeal.Id,
             };
 
             var response = await client.AddFundsToDealAsync(data);
             // отлов ошибок
             if (!String.IsNullOrEmpty(response.Error))
             {
-                deal.OutMessage_Deal = response.Error;
+                deal.OutMessageDeal = response.Error;
                 MessageBox.Show(response.Error, "AddFunds", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
             else
             {
-                deal.OutMessage_Deal = $"Усреднение сделки №{deal.xDeal.Id} выполнено.";
+                deal.OutMessageDeal = $"Усреднение сделки №{deal.XDeal.Id} выполнено.";
                 return true;
             }
 
@@ -104,7 +104,7 @@ namespace Botovod.Models
                             break;
                     }
                     BotovodDeal bDeal = new BotovodDeal(xDeal);
-                    bDeal.OutMessage_Deal = dealStatus;
+                    bDeal.OutMessageDeal = dealStatus;
                     UpdateDeal(bDeal);
                 }
                 // удаление старых/закрытых сделок
@@ -113,7 +113,7 @@ namespace Botovod.Models
                     bool del = true;
                     foreach (var item in response.Data)
                     {
-                        if (item.Id == _traderDeals[i].xDeal.Id)
+                        if (item.Id == _traderDeals[i].XDeal.Id)
                         {
                             del = false;
                             break;
@@ -136,11 +136,11 @@ namespace Botovod.Models
             foreach (BotovodDeal deal in _traderDeals)
             {
                 // обновляем существующую сделку
-                if (deal.xDeal.Id == inDeal.xDeal.Id)
+                if (deal.XDeal.Id == inDeal.XDeal.Id)
                 {
-                    deal.xDeal = inDeal.xDeal;
-                    deal.OutMessage_Deal = inDeal.OutMessage_Deal;
-                    deal.CurrentPrice = inDeal.xDeal.CurrentPrice;
+                    deal.XDeal = inDeal.XDeal;
+                    deal.OutMessageDeal = inDeal.OutMessageDeal;
+                    deal.CurrentPrice = inDeal.XDeal.CurrentPrice;
                     exist = true;
                 }
             }

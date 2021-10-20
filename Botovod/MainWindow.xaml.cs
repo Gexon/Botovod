@@ -42,7 +42,7 @@ namespace Botovod
         {
             // Блокируем кнопку чтоб не натыкали мильен раз
             OutMessage.Text = "Получение списка подключенных бирж";
-            btnGetAccounts.IsEnabled = false;
+            BtnGetAccounts.IsEnabled = false;
 
             var response = await client.GetAccountsAsync();
             // отлов ошибок
@@ -50,7 +50,7 @@ namespace Botovod
             {
                 OutMessage.Text = response.Error;
                 // Деблокирем кнопку
-                btnGetAccounts.IsEnabled = true;
+                BtnGetAccounts.IsEnabled = true;
                 return;
             }
 
@@ -76,7 +76,7 @@ namespace Botovod
             }
 
             // Деблокирем кнопку
-            btnGetAccounts.IsEnabled = true;
+            BtnGetAccounts.IsEnabled = true;
 
         }
 
@@ -84,8 +84,8 @@ namespace Botovod
         {
             // Блокируем кнопку чтоб не натыкали мильен раз
             OutMessage.Text = "Получение списка Long ботов";
-            btnGetBots.IsEnabled = false;
-            cbxBots.Items.Clear();
+            BtnGetBots.IsEnabled = false;
+            CbxBots.Items.Clear();
 
             var response = await client.GetBotsAsync();
             // отлов ошибок
@@ -93,7 +93,7 @@ namespace Botovod
             {
                 OutMessage.Text = response.Error;
                 // Деблокирем кнопку
-                btnGetBots.IsEnabled = true;
+                BtnGetBots.IsEnabled = true;
                 return;
             }
 
@@ -113,8 +113,8 @@ namespace Botovod
                 foreach (var item in bots)
                 {
                     Bot bot = item.Value;
-                    cbxBots.Items.Add(bot.Name);
-                    if (cbxBots.Items.Count > 0) { cbxBots.SelectedIndex = 0; }
+                    CbxBots.Items.Add(bot.Name);
+                    if (CbxBots.Items.Count > 0) { CbxBots.SelectedIndex = 0; }
                 }
 
             }
@@ -124,7 +124,7 @@ namespace Botovod
             }
 
             // Деблокирем кнопку
-            btnGetBots.IsEnabled = true;
+            BtnGetBots.IsEnabled = true;
 
         }
 
@@ -132,11 +132,11 @@ namespace Botovod
         {
             // Блокируем кнопку чтоб не натыкали мильен раз
             OutMessage.Text = "Запуск бота...";
-            btnStartBot.IsEnabled = false;
+            BtnStartBot.IsEnabled = false;
 
-            if (cbxBots.SelectedValue != null)
+            if (CbxBots.SelectedValue != null)
             {
-                int BotId = (int)cbxBots.SelectedValue;
+                int BotId = (int)CbxBots.SelectedValue;
                 bots.TryGetValue(BotId, out Bot bot);
                 if (bot != null)
                 {
@@ -150,14 +150,14 @@ namespace Botovod
                             OutMessage.Text = response.Error;
                         }
                         // Деблокирем кнопку
-                        btnStartBot.IsEnabled = true;
+                        BtnStartBot.IsEnabled = true;
                         return;
                     }
 
                 }
                 OutMessage.Text = "Бот не найден";
                 // Деблокирем кнопку
-                btnStartBot.IsEnabled = true;
+                BtnStartBot.IsEnabled = true;
             }
 
         }
@@ -166,11 +166,11 @@ namespace Botovod
         {
             // Блокируем кнопку чтоб не натыкали мильен раз
             OutMessage.Text = "Останов бота...";
-            btnStopBot.IsEnabled = false;
+            BtnStopBot.IsEnabled = false;
 
-            if (cbxBots.SelectedValue != null)
+            if (CbxBots.SelectedValue != null)
             {
-                int BotId = (int)cbxBots.SelectedValue;
+                int BotId = (int)CbxBots.SelectedValue;
                 bots.TryGetValue(BotId, out Bot bot);
                 if (bot != null)
                 {
@@ -184,7 +184,7 @@ namespace Botovod
                             OutMessage.Text = response.Error;
                         }
                         // Деблокирем кнопку
-                        btnStopBot.IsEnabled = true;
+                        BtnStopBot.IsEnabled = true;
                         return;
                     }
 
@@ -192,7 +192,7 @@ namespace Botovod
                 }
                 OutMessage.Text = "Бот не найден";
                 // Деблокирем кнопку
-                btnStopBot.IsEnabled = true;
+                BtnStopBot.IsEnabled = true;
 
             }
 

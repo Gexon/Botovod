@@ -25,21 +25,21 @@ namespace Botovod
         //  Максимальное количество страховочных ордеров (для всех новых сделок)
         public int MaxSafetyOrders
         {
-            get => calculator.initData.MaxSafetyOrders;
-            set => calculator.initData.MaxSafetyOrders = value;
+            get => calculator.InitData.MaxSafetyOrders;
+            set => calculator.InitData.MaxSafetyOrders = value;
         }
         
         // Трейлинг отклонение, % (для всех новых сделок)
         public decimal TrailingDeviation
         {
-            get => calculator.initData.TrailingDeviation;
-            set => calculator.initData.TrailingDeviation = value;
+            get => calculator.InitData.TrailingDeviation;
+            set => calculator.InitData.TrailingDeviation = value;
         }
         // Шаг страховочного ордера, % (для всех новых сделок)
         public decimal SafetyOrderStep
         {
-            get => calculator.initData.SafetyOrderStep;
-            set => calculator.initData.SafetyOrderStep = value;
+            get => calculator.InitData.SafetyOrderStep;
+            set => calculator.InitData.SafetyOrderStep = value;
         }
 
         public MainVM(Calculator inCalculator)
@@ -47,7 +47,7 @@ namespace Botovod
             calculator = inCalculator;
             _trader = calculator.Trader;
 
-            calculator.initData.PropertyChanged += InitData_PropertyChanged;
+            calculator.InitData.PropertyChanged += InitData_PropertyChanged;
             // сделки торговца
             //DealsInBotovod = new ObservableCollection<DealVM>(_trader.TraderDeals.Select(ap => new DealVM(ap, calculator)));
             _trader.FillingDeals(BinaryDataStorage.LoadDealsFormDisk());
@@ -70,7 +70,7 @@ namespace Botovod
 
         public void Dispose()
         {
-            calculator.initData.PropertyChanged -= InitData_PropertyChanged;
+            calculator.InitData.PropertyChanged -= InitData_PropertyChanged;
         }
 
         // Чтобы получать изменение не из VM, а из наблюдаемого класса
@@ -98,7 +98,7 @@ namespace Botovod
                           string str = obj as string;
                           if (str != null)
                           {
-                              calculator.initData.KData = str;
+                              calculator.InitData.KData = str;
                           }
                       }, (obj) => true)); // если false, то кнопка будет неактивна
             }
@@ -110,7 +110,7 @@ namespace Botovod
                 return new RelayCommand((object obj) =>
                 {
                     // ввод APISec
-                    calculator.initData.SData = (string)obj;
+                    calculator.InitData.SData = (string)obj;
                     MessageBox.Show("API ключи добавлены. Перезапустите программу", "AddAPIKeyCommand", MessageBoxButton.OK, MessageBoxImage.Warning);
                 });
             }
@@ -123,8 +123,8 @@ namespace Botovod
                 {
                     //if (i.HasValue) calculator.RemoveValue(i.Value);
                     // удаляем API из хранилища
-                    calculator.initData.KData = string.Empty;
-                    calculator.initData.SData = string.Empty;
+                    calculator.InitData.KData = string.Empty;
+                    calculator.InitData.SData = string.Empty;
                     MessageBox.Show("API ключи удалены. Перезапустите программу", "RemoveAPIkey", MessageBoxButton.OK, MessageBoxImage.Warning);
                 });
             }

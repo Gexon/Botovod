@@ -21,10 +21,10 @@ namespace Botovod
         }
 
         //public Visibility IsBuyVisible => BuyCommand == null ? Visibility.Collapsed : Visibility.Visible;        
-        public string BotName => BotovodDeal.xDeal.BotName;
-        public string OutMessage_Deal => BotovodDeal.OutMessage_Deal;
+        public string BotName => BotovodDeal.XDeal.BotName;
+        public string OutMessageDeal => BotovodDeal.OutMessageDeal;
         //public Visibility IsAmountVisible => BuyCommand == null ? Visibility.Collapsed : Visibility.Visible;
-        public string Pair => BotovodDeal.xDeal.Pair;
+        public string Pair => BotovodDeal.XDeal.Pair;
         public decimal CurrentPrice => BotovodDeal.CurrentPrice;
         public decimal LblCurrentTrailing => BotovodDeal.LblCurrentTrailing; // текущее отклонение цены в % "Value was either too large or too small for a Decimal."
         public decimal LblTrailingMaxPercent => BotovodDeal.LblTrailingMaxPercent; // максимальное отклонение цены в % //  Math.Round(25.657446842, 2) // Выведет 25,66 
@@ -43,12 +43,13 @@ namespace Botovod
             get => BotovodDeal.TrailingDeviation;
             set => BotovodDeal.TrailingDeviation = value;
         }
-        public int ManualSafetyOrders => BotovodDeal.xDeal.CompletedManualSafetyOrdersCount; // количество усреднений
+        public int ManualSafetyOrders => BotovodDeal.XDeal.CompletedManualSafetyOrdersCount; // количество усреднений
         public decimal LastFundPercent => Math.Round(BotovodDeal.LastFundPercent, 2); // последнее усреднение, %s
         public string MaxSafetyOrders   // Максимум усреднений
         {
             get => BotovodDeal.MaxSafetyOrders.ToString();
-            set { if (int.TryParse(value, out int num)) { BotovodDeal.MaxSafetyOrders = num; }; }
+            set { if (int.TryParse(value, out int num)) { BotovodDeal.MaxSafetyOrders = num; }
+            }
         }
 
         // Чтобы получать изменение не из VM, а из наблюдаемого класса
