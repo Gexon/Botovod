@@ -11,7 +11,8 @@ namespace Botovod.Models
         public readonly InitializedData InitData;
 
         // общий таймер для всех сделок.
-        private readonly System.Windows.Threading.DispatcherTimer _timer = new System.Windows.Threading.DispatcherTimer();
+        private readonly System.Windows.Threading.DispatcherTimer _timer =
+            new System.Windows.Threading.DispatcherTimer();
 
         public Calculator(InitializedData inInitData)
         {
@@ -54,7 +55,8 @@ namespace Botovod.Models
                     continue;
                 }
 
-                await CalculateTrailing(deal);
+                // главный мозг
+                if (!await CalculateTrailing(deal)) return; // серьезная ошибка, покидаем лодку.
             }
 
             // восстанавливаем таймер
@@ -62,12 +64,12 @@ namespace Botovod.Models
         }
 
         // Основыные расчеты движения цены, процентов, отклонений трейлинга.
-        private async Task CalculateTrailing(BotovodDeal deal)
+        private async Task<bool> CalculateTrailing(BotovodDeal deal)
         {
             var currentPrice = deal.XDeal.CurrentPrice;
             if (currentPrice == 0)
             {
-                return;
+                return false;
             }
 
             var boughtAveragePrice = deal.XDeal.BoughtAveragePrice; // средняя цена сделки
@@ -78,9 +80,9 @@ namespace Botovod.Models
 
             // рассчитываем текущее отклонение цены в %
             // deal.xDeal.ActualProfitPercentage;
-            decimal currentTrailingPercent = (currentPrice - boughtAveragePrice) * 100 / boughtAveragePrice;
+            var currentTrailingPercent = (currentPrice - boughtAveragePrice) * 100 / boughtAveragePrice;
             // считаем максимальное отклонение цены в %
-            decimal trailingMaxPercent = (deal.TrailingMaxPrice - boughtAveragePrice) * 100 / boughtAveragePrice;
+            var trailingMaxPercent = (deal.TrailingMaxPrice - boughtAveragePrice) * 100 / boughtAveragePrice;
 
             // обновляем максимальное отклонение (алгоритм для лонгового ботаs)
             if (currentTrailingPercent < trailingMaxPercent)
@@ -122,6 +124,8 @@ namespace Botovod.Models
             {
                 deal.IsTrailing = false;
             }
+
+            return true;
         }
     }
 }
