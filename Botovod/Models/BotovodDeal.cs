@@ -10,8 +10,12 @@ namespace Botovod.Models
         public BotovodDeal(XCommas.Net.Objects.Deal inXDeal)
         {
             XDeal = inXDeal;
+            Id = inXDeal.Id;
             CurrentPrice = inXDeal.CurrentPrice;
             OutMessageDeal = "Новый";
+            BotName = inXDeal.BotName;
+            Pair = inXDeal.Pair;
+            ManualSafetyOrders = inXDeal.CompletedManualSafetyOrdersCount;
             // вычисляемые поля/свойства
             TrailingMaxPrice = inXDeal.CurrentPrice;
             LblTrailingMaxPercent = inXDeal.ActualProfitPercentage != null
@@ -25,8 +29,7 @@ namespace Botovod.Models
             IsTrailing = false;
         }
 
-        // 
-        private XCommas.Net.Objects.Deal _xDeal;
+        [field: NonSerialized] private XCommas.Net.Objects.Deal _xDeal;
 
         public XCommas.Net.Objects.Deal XDeal
         {
@@ -36,6 +39,33 @@ namespace Botovod.Models
                 _xDeal = value;
                 RaisePropertyChanged();
             }
+        }
+
+        // Id сделки
+        private int _id;
+
+        public int Id
+        {
+            get => _id;
+            set => _id = value;
+        }
+
+        // имя бота
+        private string _botName;
+
+        public string BotName
+        {
+            get => _botName;
+            set => _botName = value;
+        }
+
+        // валютная пара
+        private string _pair;
+
+        public string Pair
+        {
+            get => _pair;
+            set => _pair = value;
         }
 
         // текущая цена
@@ -190,6 +220,20 @@ namespace Botovod.Models
             {
                 if (_maxSafetyOrders == value) return;
                 _maxSafetyOrders = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        // количество выполненных усреднений
+        private int _manualSafetyOrders;
+
+        public int ManualSafetyOrders
+        {
+            get => _manualSafetyOrders;
+            set
+            {
+                if (_manualSafetyOrders == value) return;
+                _manualSafetyOrders = value;
                 RaisePropertyChanged();
             }
         }

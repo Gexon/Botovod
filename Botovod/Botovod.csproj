@@ -27,10 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\XCommas.Net\XCommas.Net\XCommas.Net.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Resource Include="Resources\botovod-logo.png" />
   </ItemGroup>
 
@@ -47,6 +43,11 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="TALib.NETCore" Version="0.4.4" />
+    <PackageReference Include="XCommas.Net" Version="1.0.33" />
   </ItemGroup>
 
 </Project>

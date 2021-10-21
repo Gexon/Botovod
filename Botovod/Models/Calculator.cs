@@ -124,5 +124,7 @@ namespace Botovod.Models
                 deal.IsTrailing = false;
             }
         }
+        
+        // коэффициент Шарпа
     }
 }

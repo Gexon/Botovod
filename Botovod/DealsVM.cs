@@ -21,10 +21,10 @@ namespace Botovod
         }
 
         //public Visibility IsBuyVisible => BuyCommand == null ? Visibility.Collapsed : Visibility.Visible;        
-        public string BotName => BotovodDeal.XDeal.BotName;
+        public string BotName => BotovodDeal.BotName;
         public string OutMessageDeal => BotovodDeal.OutMessageDeal;
         //public Visibility IsAmountVisible => BuyCommand == null ? Visibility.Collapsed : Visibility.Visible;
-        public string Pair => BotovodDeal.XDeal.Pair;
+        public string Pair => BotovodDeal.Pair;
         public decimal CurrentPrice => BotovodDeal.CurrentPrice;
         public decimal LblCurrentTrailing => BotovodDeal.LblCurrentTrailing; // текущее отклонение цены в % "Value was either too large or too small for a Decimal."
         public decimal LblTrailingMaxPercent => BotovodDeal.LblTrailingMaxPercent; // максимальное отклонение цены в % //  Math.Round(25.657446842, 2) // Выведет 25,66 
@@ -43,7 +43,7 @@ namespace Botovod
             get => BotovodDeal.TrailingDeviation;
             set => BotovodDeal.TrailingDeviation = value;
         }
-        public int ManualSafetyOrders => BotovodDeal.XDeal.CompletedManualSafetyOrdersCount; // количество усреднений
+        public int ManualSafetyOrders => BotovodDeal.ManualSafetyOrders; // количество усреднений
         public decimal LastFundPercent => Math.Round(BotovodDeal.LastFundPercent, 2); // последнее усреднение, %s
         public string MaxSafetyOrders   // Максимум усреднений
         {
@@ -60,7 +60,6 @@ namespace Botovod
             RaisePropertyChanged(nameof(PrgTrailingR));
             RaisePropertyChanged(nameof(Foreground));
             RaisePropertyChanged(nameof(ForegroundR));
-            RaisePropertyChanged(nameof(ManualSafetyOrders));
             RaisePropertyChanged(nameof(SafetyOrderStep));
             RaisePropertyChanged(nameof(TrailingDeviation));
             RaisePropertyChanged(nameof(LblTrailingMaxPercent));
