@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
+using NLog;
 using XCommas.Net.Objects;
 
 namespace Botovod.Models
@@ -16,6 +19,7 @@ namespace Botovod.Models
 
         private readonly InitializedData _initData;
 
+        private static readonly Logger Log = LogManager.GetCurrentClassLogger();
         // тут депозит торгоша
         //public ReadOnlyObservableCollection<CoinStack> TraderCash { get; }
         //private readonly ObservableCollection<CoinStack> _traderCash;
@@ -34,15 +38,28 @@ namespace Botovod.Models
             // сделки торговца
             _traderDeals = new ObservableCollection<BotovodDeal>();
             TraderDeals = new ReadOnlyObservableCollection<BotovodDeal>(_traderDeals);
+
+            // инициализация логгера
+            var config = new NLog.Config.LoggingConfiguration();
+            // Targets where to log to: File and Console
+            var appDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var logfile = new NLog.Targets.FileTarget("trader_deals") { FileName = appDir + "\\trader_deals.log" };
+            //var logconsole = new NLog.Targets.ConsoleTarget("logconsole");
+            // Rules for mapping loggers to targets            
+            //config.AddRule(LogLevel.Info, LogLevel.Fatal, logconsole);
+            config.AddRule(LogLevel.Info, LogLevel.Fatal, logfile);
+            // Apply config           
+            LogManager.Configuration = config;
         }
 
         internal async Task<bool> AddFunds(BotovodDeal deal)
         {
             // Усреднение. volume - это сколько торгуемой валюты купить на битки например.
             var volume = deal.XDeal.BaseOrderVolume / deal.XDeal.CurrentPrice;
-            volume *= (deal.XDeal.CompletedManualSafetyOrdersCount + 1); // мартин 2
-
+            var manualSO = deal.XDeal.CompletedManualSafetyOrdersCount; 
+            volume *= (manualSO+ 1); // мартин 2
             deal.OutMessageDeal = $"Покупаю {Math.Round(volume, 5)} торгуемых монет";
+            Log.Info(deal.OutMessageDeal+$". Выполнено усреднений: {manualSO}");
             //return true;
             var data = new DealAddFundsParameters
             {
@@ -56,12 +73,14 @@ namespace Botovod.Models
             if (!string.IsNullOrEmpty(response.Error))
             {
                 deal.OutMessageDeal = response.Error;
+                Log.Error($"AddFunds. Ошибка усреднения: {response.Error}");
                 MessageBox.Show(response.Error, "AddFunds", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
             else
             {
                 deal.OutMessageDeal = $"Усреднение сделки №{deal.XDeal.Id} выполнено.";
+                Log.Info(deal.OutMessageDeal);
                 return true;
             }
         }
@@ -70,6 +89,7 @@ namespace Botovod.Models
         {
             if (string.IsNullOrEmpty(_initData.KData) || string.IsNullOrEmpty(_initData.SData))
             {
+                Log.Error("GetDeals. API ключи не найдены");
                 MessageBox.Show("Вбейте API ключи в настройках", "GetDeals", MessageBoxButton.OK,
                     MessageBoxImage.Warning);
                 return false;
@@ -80,12 +100,14 @@ namespace Botovod.Models
             // отлов ошибок
             if (!string.IsNullOrEmpty(response.Error))
             {
+                Log.Error($"GetDeals. Ошибка получения сделок: {response.Error}");
                 MessageBox.Show(response.Error, "GetDeals", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
 
             // смотрим есть ли сделки вообще.            
-            if ((response.Data == null) || !response.Data.Any()) return true;
+            //if ((response.Data == null) || !response.Data.Any()) return true;
+            if (response.Data == null) return true;
             foreach (var xDeal in response.Data)
             {
                 string dealStatus;
@@ -149,6 +171,7 @@ namespace Botovod.Models
             inDeal.TrailingDeviation = _initData.TrailingDeviation;
             inDeal.OutMessageDeal = "Новая сделка"; // хз зачем, пусть пока будет.
             _traderDeals.Add(inDeal);
+            Log.Info($"Новая сделка: {inDeal.Id}");
             RaisePropertyChanged();
         }
 

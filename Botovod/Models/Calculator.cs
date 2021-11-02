@@ -66,6 +66,7 @@ namespace Botovod.Models
         // Основыные расчеты движения цены, процентов, отклонений трейлинга.
         private async Task CalculateTrailing(BotovodDeal deal)
         {
+            if (deal.XDeal == null) return;
             var currentPrice = deal.XDeal.CurrentPrice;
             if (currentPrice == 0)
             {
@@ -101,6 +102,7 @@ namespace Botovod.Models
             if ((currentTrailingPercent < deal.LastFundPercent - deal.SafetyOrderStep) &&
                 (deal.XDeal.CompletedManualSafetyOrdersCount < deal.MaxSafetyOrders))
             {
+                // Как вариант, включать трейлинг после индикатора MACD ниже 0.
                 deal.IsTrailing = true;
                 // проверка на отклонение цены вверх(лонг) от минимального, чтоб начать усреднение
                 var deltaTrailing = currentTrailingPercent - trailingMaxPercent;
