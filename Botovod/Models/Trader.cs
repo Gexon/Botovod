@@ -57,7 +57,8 @@ namespace Botovod.Models
             // Усреднение. volume - это сколько торгуемой валюты купить на битки например.
             var volume = deal.XDeal.BaseOrderVolume / deal.XDeal.CurrentPrice;
             var manualSO = deal.XDeal.CompletedManualSafetyOrdersCount; 
-            volume *= (manualSO+ 1); // мартин 2
+            //volume *= (manualSO+ 1); // мартин 2
+            volume *= (decimal)Math.Pow(2, manualSO); // мартин 2 (SO1=x1, SO2=x2, SO3=x4)
             deal.OutMessageDeal = $"Покупаю {Math.Round(volume, 5)} торгуемых монет";
             Log.Info(deal.OutMessageDeal+$". Выполнено усреднений: {manualSO}");
             //return true;
