@@ -32,7 +32,7 @@ namespace Botovod.Models
             _initData = inInitData;
             _client = new XCommas.Net.XCommasApi(_initData.KData, _initData.SData)
             {
-                UserMode = UserMode.Paper
+                UserMode = UserMode.Real
             };
 
             // сделки торговца
