@@ -88,21 +88,13 @@ namespace Botovod.Models
 
         internal async Task<bool> GetDeals()
         {
-            if (string.IsNullOrEmpty(_initData.KData) || string.IsNullOrEmpty(_initData.SData))
-            {
-                Log.Error("GetDeals. API ключи не найдены");
-                MessageBox.Show("Вбейте API ключи в настройках", "GetDeals", MessageBoxButton.OK,
-                    MessageBoxImage.Warning);
-                return false;
-            }
-
             //var response = await client.GetDealsAsync(limit: 60, dealScope: DealScope.Active, dealOrder: DealOrder.CreatedAt);
             var response = await _client.GetDealsAsync(dealScope: DealScope.Active);
             // отлов ошибок
             if (!string.IsNullOrEmpty(response.Error))
             {
                 Log.Error($"GetDeals. Ошибка получения сделок: {response.Error}");
-                MessageBox.Show(response.Error, "GetDeals", MessageBoxButton.OK, MessageBoxImage.Warning);
+                //MessageBox.Show(response.Error, "GetDeals", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
 

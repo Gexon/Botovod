@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Botovod.Models
 {
@@ -16,6 +17,16 @@ namespace Botovod.Models
 
         public Calculator(InitializedData inInitData)
         {
+            // проверка API ключей
+            if (string.IsNullOrEmpty(inInitData.KData) || string.IsNullOrEmpty(inInitData.SData))
+            {
+                //Log.Error("GetDeals. API ключи не найдены");
+                MessageBox.Show("Вбейте API ключи в настройках", "GetDeals", MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+                return;
+            }
+            
+            //
             InitData = inInitData;
             Trader = new Trader(InitData);
 
@@ -23,6 +34,7 @@ namespace Botovod.Models
             _timer.Tick += TimerTick;
             _timer.Interval = new TimeSpan(0, 0, 6);
             _timer.Start();
+            
         }
 
         /// <summary>
@@ -52,6 +64,8 @@ namespace Botovod.Models
                 if (!resultGetDeals)
                 {
                     deal.OutMessageDeal = "GetDeals вернул ошибку";
+                    //todo переделать обработку ошибок API
+                    await Task.Delay(60000); //Ждем 60 сек и продолжаем работу, запускаем таймер дальше.
                     continue;
                 }
 
